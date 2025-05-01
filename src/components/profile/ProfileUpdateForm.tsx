@@ -11,6 +11,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { CircleUserRoundIcon, CloudUpload } from "lucide-react"
 import { useForm, useWatch } from "react-hook-form"
 import { toast } from "sonner"
+import { cn } from "@/lib/utils"
 import { useAction } from "@/hooks/useAction"
 import { useFileUpload } from "@/hooks/useFileUpload"
 import { Button } from "@/components/ui/button"
@@ -25,6 +26,7 @@ interface ProfileUpdateFormProps {
   name: string
   image?: string
   onboarding?: boolean
+  className?: string
 }
 
 export function ProfileUpdateForm({
@@ -32,6 +34,7 @@ export function ProfileUpdateForm({
   email,
   image,
   onboarding,
+  className,
 }: ProfileUpdateFormProps) {
   const id = useId()
   const pathname = usePathname()
@@ -88,7 +91,7 @@ export function ProfileUpdateForm({
   const onSubmit = (value: InputTypeProfileUpdate) => execute(value)
 
   return (
-    <Card className="bg-background mx-auto w-full max-w-xl shadow-none">
+    <Card className={cn("bg-background w-full max-w-xl shadow-none", className)}>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <CardContent className="space-y-4">

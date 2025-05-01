@@ -1,7 +1,7 @@
 "use client"
 
 import type { JSX } from "react"
-import { CalendarIcon } from "lucide-react"
+import { CalendarIcon, LucideIcon } from "lucide-react"
 import { Control, FieldValues, Path } from "react-hook-form"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -88,30 +88,36 @@ export function InputField<F extends FieldValues>(props: {
   disabled?: boolean
   prefixItem?: React.ReactNode
   autoComplete?: string
+  Icon?: LucideIcon
+  withIconPrefix?: boolean
 }) {
   return (
     <FormField
       control={props.control}
       name={props.name}
       render={({ field }) => (
-        <FormItem className={props.className}>
-          <label className="flex flex-col gap-2">
-            {props.label ? (
-              <FieldLabel required={props.required}>{props.label}</FieldLabel>
-            ) : null}
+        <FormItem>
+          {props.label ? (
+            <FieldLabel required={props.required}>{props.label}</FieldLabel>
+          ) : null}
+          <div className={cn(props.withIconPrefix && "relative")}>
             <FormControl>
               <Input
                 {...field}
                 value={field.value ?? ""}
                 placeholder={props.placeholder}
-                className="max-w-lg"
+                className={cn(props.withIconPrefix && "peer ps-9", props.className)}
                 disabled={props.disabled}
                 type={props.type}
                 autoComplete={props.autoComplete}
               />
             </FormControl>
-            <FormMessage />
-          </label>
+            {props.Icon && (
+              <div className="text-muted-foreground/80 pointer-events-none absolute inset-y-2 start-0 flex items-center justify-center ps-3 peer-disabled:opacity-50">
+                <props.Icon size={16} aria-hidden="true" />
+              </div>
+            )}
+          </div>
         </FormItem>
       )}
     />

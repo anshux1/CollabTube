@@ -48,6 +48,60 @@ export const authRoutes: RouteConfigType[] = [
       description: "Access your account.",
     },
   },
+  {
+    name: "Sign up",
+    path: "/sign-up",
+    metadata: {
+      title: "Sign up",
+      description: "Create your account.",
+    },
+  },
+]
+
+export const settingsRoutes: RouteConfigType[] = [
+  {
+    name: "Account",
+    path: "/:workspaceId/settings/account",
+    metadata: {
+      title: "Account Settings",
+      description: "Manage your personal account settings for this workspace",
+    },
+  },
+  {
+    name: "Workspaces",
+    path: "/:workspaceId/settings/workspaces",
+    metadata: {
+      title: "Workspaces Settings",
+      description: "Manage multiple workspaces and their configurations",
+    },
+  },
+]
+
+export const workspaceSettingsRoutes: RouteConfigType[] = [
+  {
+    name: "Workspace",
+    path: "/:workspaceId/settings/workspace",
+    metadata: {
+      title: "Workspace Settings",
+      description: "Customize settings specific to this workspace",
+    },
+  },
+  {
+    name: "Members",
+    path: "/:workspaceId/settings/members",
+    metadata: {
+      title: "Members Settings",
+      description: "Manage team members and their permissions",
+    },
+  },
+  {
+    name: "Channels",
+    path: "/:workspaceId/settings/channels",
+    metadata: {
+      title: "Channel Settings",
+      description: "Manage channels within this workspace",
+    },
+  },
 ]
 
 export const workspaceRoutes: RouteConfigType[] = [
@@ -56,15 +110,7 @@ export const workspaceRoutes: RouteConfigType[] = [
     path: "/:workspaceId/dashboard",
     metadata: {
       title: "Dashboard",
-      description: "Overview of your workspace",
-    },
-  },
-  {
-    name: "Settings",
-    path: "/:workspaceId/settings",
-    metadata: {
-      title: "Settings",
-      description: "Manage workspace settings",
+      description: "Overview of your workspace activities",
     },
   },
   {
@@ -72,7 +118,8 @@ export const workspaceRoutes: RouteConfigType[] = [
     path: "/:workspaceId/integrations",
     metadata: {
       title: "Integrations",
-      description: "Connect third-party tools",
+      description: "Connect and manage third-party integrations",
     },
   },
+  ...settingsRoutes,
 ]

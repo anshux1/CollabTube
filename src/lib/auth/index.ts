@@ -1,3 +1,4 @@
+import { verifyEmail } from "@/action/mails"
 import { MagicLinkMail } from "@/emails/magic-link"
 import { env } from "@/env"
 import { betterAuth } from "better-auth"
@@ -12,6 +13,25 @@ export const auth = betterAuth({
   database: prismaAdapter(db, {
     provider: "postgresql",
   }),
+  emailAndPassword: {
+    enabled: true,
+    autoSignIn: true,
+    requireEmailVerification: true,
+  },
+  emailVerification: {
+    sendOnSignUp: true,
+    expiresIn: 600,
+    autoSignInAfterVerification: true,
+    sendVerificationEmail: async ({ url, user }) => {
+      const verificationUrl = `${url}onboarding/profile`
+      const res = await verifyEmail({
+        name: user.name,
+        email: user.email,
+        url: verificationUrl,
+      })
+      console.log("res", res)
+    },
+  },
   socialProviders: {
     google: {
       clientId: env.GOOGLE_CLIENT_ID,
@@ -31,11 +51,22 @@ export const auth = betterAuth({
         defaultValue: "profile",
       },
     },
+    changeEmail: {
+      enabled: true,
+      sendChangeEmailVerification: async ({ user, url, newEmail }) => {
+        const verificationUrl = `${url}/settings/profile?type=changeEmail`
+        await verifyEmail({
+          name: user.name,
+          email: newEmail,
+          url: verificationUrl,
+        })
+      },
+    },
   },
   account: {
     accountLinking: {
       enabled: true,
-      trustedProviders: ["google", "email-password"],
+      trustedProviders: ["google", "email-password", "dropbox"],
     },
   },
   rateLimit: {
@@ -64,5 +95,3 @@ export const auth = betterAuth({
     organization(),
   ],
 })
-
-export type Session = typeof auth.$Infer.Session
