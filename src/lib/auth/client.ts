@@ -2,6 +2,7 @@ import { env } from "process"
 import {
   inferAdditionalFields,
   magicLinkClient,
+  multiSessionClient,
   organizationClient,
 } from "better-auth/client/plugins"
 import { createAuthClient } from "better-auth/react"
@@ -13,5 +14,6 @@ export const authClient = createAuthClient({
     inferAdditionalFields<typeof auth>(),
     magicLinkClient(),
     organizationClient(),
+    multiSessionClient(),
   ],
 })

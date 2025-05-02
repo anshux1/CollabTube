@@ -15,7 +15,5 @@ export type AuthContext = {
   session: Session
 }
 
-export type MagicLinkResponse = Awaited<ReturnType<typeof auth.api.signInMagicLink>>
 export type SignInResponse = Awaited<ReturnType<typeof auth.api.signInEmail>>
 export type SignUpResponse = Awaited<ReturnType<typeof auth.api.signUpEmail>>
-export type ChangeEmailResponse = Awaited<ReturnType<typeof auth.api.changeEmail>>

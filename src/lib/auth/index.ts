@@ -1,10 +1,11 @@
+import { markEmailVerified } from "@/action/auth/account"
 import { verifyEmail } from "@/action/mails"
 import { MagicLinkMail } from "@/emails/magic-link"
 import { env } from "@/env"
 import { betterAuth } from "better-auth"
 import { prismaAdapter } from "better-auth/adapters/prisma"
 import { nextCookies } from "better-auth/next-js"
-import { magicLink, organization } from "better-auth/plugins"
+import { magicLink, multiSession, organization } from "better-auth/plugins"
 import { resend } from "@/lib/services/resend"
 import db from "@/db"
 
@@ -23,13 +24,17 @@ export const auth = betterAuth({
     expiresIn: 600,
     autoSignInAfterVerification: true,
     sendVerificationEmail: async ({ url, user }) => {
-      const verificationUrl = `${url}onboarding/profile`
-      const res = await verifyEmail({
-        name: user.name,
-        email: user.email,
-        url: verificationUrl,
-      })
-      console.log("res", res)
+      console.log("url 1", url)
+      if (url.includes("/settings/profile?type=changeEmail")) {
+        await markEmailVerified({ email: user.email, name: user.name })
+      } else {
+        const verificationUrl = `${url}onboarding/profile`
+        await verifyEmail({
+          name: user.name,
+          email: user.email,
+          url: verificationUrl,
+        })
+      }
     },
   },
   socialProviders: {
@@ -54,7 +59,8 @@ export const auth = betterAuth({
     changeEmail: {
       enabled: true,
       sendChangeEmailVerification: async ({ user, url, newEmail }) => {
-        const verificationUrl = `${url}/settings/profile?type=changeEmail`
+        console.log("url 2", url)
+        const verificationUrl = `${url}settings/profile?type=changeEmail`
         await verifyEmail({
           name: user.name,
           email: newEmail,
@@ -93,5 +99,6 @@ export const auth = betterAuth({
     }),
     nextCookies(),
     organization(),
+    multiSession(),
   ],
 })

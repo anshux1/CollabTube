@@ -1,4 +1,5 @@
-import { Button } from "@/components/ui/button"
+import { Cog } from "lucide-react"
+import { Breadcrumbs } from "@/components/breadcrumbs"
 import { LinkButton } from "@/components/link-button"
 import { CollapsibleDemo } from "@/components/sidebar/co"
 import { NavUser } from "@/components/sidebar/NavUser"
@@ -22,15 +23,20 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             an
           </div>
           {/* Sidebar content */}
-          <Button size="sm" variant="secondary" className="justify-start">
-            hello
-          </Button>
+          <LinkButton href="/settings/profile" variant="ghost" className="justify-start">
+            <Cog />
+            Settings
+          </LinkButton>
         </aside>
 
         <div className="flex h-screen flex-col overflow-hidden">
-          <div className="h-16 w-full shrink-0 border-b"></div>
+          <div className="flex h-14 w-full shrink-0 items-center border-b px-3 lg:px-6">
+            <Breadcrumbs />
+          </div>
 
-          <div className="no-scrollbar flex-1 overflow-y-auto px-6 py-4">{children}</div>
+          <div className="no-scrollbar flex-1 overflow-y-auto p-3 lg:px-6 lg:py-4">
+            {children}
+          </div>
         </div>
       </div>
     </div>

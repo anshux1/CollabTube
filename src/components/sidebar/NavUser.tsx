@@ -4,6 +4,7 @@ import { useEffect } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { BadgeCheck, Bell, CreditCard, LogOut, Sparkles } from "lucide-react"
+import { cn } from "@/lib/utils"
 import { useSession } from "@/hooks/auth/useSession"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
@@ -17,16 +18,24 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { ModeSwitcher } from "../mode-switcher"
 
-function UserAvatar({ name, image }: { name: string; image?: string }) {
+export function UserAvatar({
+  name,
+  image,
+  className,
+}: {
+  name: string
+  image?: string
+  className?: string
+}) {
   return (
-    <Avatar className="h-8 w-8 rounded-lg">
+    <Avatar className={cn("size-8 rounded-lg", className)}>
       <AvatarImage src={image || ""} alt={name} />
       <AvatarFallback className="rounded-lg">{name.charAt(0)}</AvatarFallback>
     </Avatar>
   )
 }
 
-function UserDetails({ name, email }: { name: string; email: string }) {
+export function UserDetails({ name, email }: { name: string; email: string }) {
   return (
     <div className="grid flex-1 text-left text-sm leading-tight">
       <span className="truncate font-semibold">{name}</span>
@@ -48,7 +57,8 @@ export function NavUser({ slug }: { slug: string }) {
     return <div className="bg-secondary h-11 w-full animate-pulse rounded-md" />
   }
 
-  const { user } = session!
+  if (!session?.user) return null
+  const { user } = session
 
   const accountMenuItems = [
     { icon: <BadgeCheck />, label: "Account" },
